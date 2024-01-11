@@ -1,0 +1,27 @@
+# Fichiers générés par Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environnement virtuel
+venv/
+
+# Fichiers de configuration spécifiques à votre IDE
+.idea/
+.vscode/
+
+# Fichiers de configuration Django
+*.log
+db.sqlite3
+*.pyc
+
+# Fichiers générés par Django
+__init__.pyc
+settings.py.bak
+*.sqlite3
+*.pyc
+
+# Fichiers générés par le système d'exploitation
+.DS_Store
+Thumbs.db
