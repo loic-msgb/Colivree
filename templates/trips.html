@@ -1,0 +1,36 @@
+<!-- templates/trips.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Voyages</title>
+</head>
+<body>
+    <h1>Liste des Voyages</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Départ</th>
+                <th>Arrivée</th>
+                <th>Lieu de Départ</th>
+                <th>Lieu d'Arrivée</th>
+                <th>Poids Disponible (kg)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trip in trips %}
+            <tr>
+                <td>{{ trip.id }}</td>
+                <td>{{ trip.departure_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ trip.arrival_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ trip.departure_location }}</td>
+                <td>{{ trip.arrival_location }}</td>
+                <td>{{ trip.available_weight }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
