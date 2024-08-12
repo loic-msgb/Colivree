@@ -12,6 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Initialisation de l'extension SQLAlchemy
 db = SQLAlchemy(app)
 
+
 class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     departure_date = db.Column(db.DateTime, nullable=False)
