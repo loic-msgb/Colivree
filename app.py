@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
+from models import db, Trip  # Importation de db et Trip depuis models.py
 from datetime import datetime
-from modeles import Trip
 
 app = Flask(__name__)
 
@@ -9,21 +8,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialisation de l'extension SQLAlchemy
-db = SQLAlchemy(app)
-
-
-class Trip(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    departure_date = db.Column(db.DateTime, nullable=False)
-    arrival_date = db.Column(db.DateTime, nullable=False)
-    departure_location = db.Column(db.String(255), nullable=False)
-    arrival_location = db.Column(db.String(255), nullable=False)
-    weight = db.Column(db.Float, nullable=False)  # Le poids disponible en kg
-
-    def __repr__(self):
-        return f'<Trip from {self.departure_location} to {self.arrival_location}>'
-
+# Initialisation de l'extension SQLAlchemy avec l'application Flask
+db.init_app(app)
 
 @app.route('/')
 def index():
@@ -54,7 +40,6 @@ def ajouter_voyage():
 
     trips = Trip.query.all()  # Récupère tous les voyages de la base de données
     return render_template('trips.html', trips=trips)
-
 
 if __name__ == '__main__':
     with app.app_context():

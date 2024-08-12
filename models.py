@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+# Initialise l'extension SQLAlchemy (db est une instance de SQLAlchemy)
 db = SQLAlchemy()
 
 class Trip(db.Model):
@@ -13,4 +14,3 @@ class Trip(db.Model):
 
     def __repr__(self):
         return f'<Trip from {self.departure_location} to {self.arrival_location}>'
-    
