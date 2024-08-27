@@ -1,42 +1,9 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Colivree</title>
-    <link rel="stylesheet" href="..\static\style\style.css">
-  </head>
-  <body>
-    <header>
-        <h1>Colivree</h1>
-    </header>
-    <p>Colivree est une application de livraison de colis entre particuliers.</p>
-    <div class="container" id="form">
-        <h1>Formulaire de Transport</h1>
-        <form action="/add_travel" method="post">
-            <div class="form-group">
-                <label for="departure">Lieu de départ :</label>
-                <input type="text" id="departure" name="departure" required>
-            </div>
-            <div class="form-group">
-                <label for="arrival">Lieu d'arrivée :</label>
-                <input type="text" id="arrival" name="arrival" required>
-            </div>
-            <div class="form-group">
-                <label for="departure-date">Date de départ :</label>
-                <input type="date" id="departure-date" name="departure-date" required>
-            </div>
-            <div class="form-group">
-                <label for="arrival-date">Date d'arrivée :</label>
-                <input type="date" id="arrival-date" name="arrival-date" required>
-            </div>
-            <div class="form-group">
-                <label for="weight">Poids disponible (kg) :</label>
-                <input type="number" id="weight" name="weight" min="0" required>
-            </div>
-            <button type="submit">Soumettre</button>
-        </form>
-    </div>
-    <footer>
-        <p>© 2021 Colivree</p>
-    </footer>
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Accueil - Colivree{% endblock %}
+
+{% block content %}
+<p>Colivree est une application de livraison de colis entre particuliers.</p>
+<p>Vous avez un colis à envoyer ? Vous êtes au bon endroit !</p>
+
+{% endblock %}

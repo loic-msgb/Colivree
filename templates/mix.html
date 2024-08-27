@@ -1,0 +1,77 @@
+<div class="container" id="form">
+    <h1>Formulaire de Transport</h1>
+    <form action="/add_travel" method="post">
+        <div class="form-group">
+            <label for="departure">Lieu de départ :</label>
+            <input type="text" id="departure" name="departure" required>
+        </div>
+        <div class="form-group">
+            <label for="arrival">Lieu d'arrivée :</label>
+            <input type="text" id="arrival" name="arrival" required>
+        </div>
+        <div class="form-group">
+            <label for="departure-date">Date de départ :</label>
+            <input type="date" id="departure-date" name="departure-date" required>
+        </div>
+        <div class="form-group">
+            <label for="arrival-date">Date d'arrivée :</label>
+            <input type="date" id="arrival-date" name="arrival-date" required>
+        </div>
+        <div class="form-group">
+            <label for="weight">Poids disponible (kg) :</label>
+            <input type="number" id="weight" name="weight" min="0" required>
+        </div>
+        <button type="submit">Soumettre</button>
+    </form>
+</div>
+
+<h1>Liste des Voyages disponibles</h1>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Départ</th>
+            <th>Arrivée</th>
+            <th>Lieu de Départ</th>
+            <th>Lieu d'Arrivée</th>
+            <th>Poids Disponible (kg)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trip in trips %}
+        <tr>
+            <td>{{ trip.id }}</td>
+            <td>{{ trip.departure_date.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ trip.arrival_date.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ trip.departure_location }}</td>
+            <td>{{ trip.arrival_location }}</td>
+            <td>{{ trip.weight }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+@app.route('/add_travel', methods=['POST'])
+def ajouter_voyage():
+    # Récupérer les données du formulaire
+    departure = request.form.get('departure')
+    arrival = request.form.get('arrival')
+
+    departure_date = request.form.get('departure-date')
+    departure_date = datetime.strptime(departure_date, '%Y-%m-%d').date()
+    arrival_date = request.form.get('arrival-date')
+    arrival_date = datetime.strptime(arrival_date, '%Y-%m-%d').date()
+
+    weight = float(request.form['weight'])
+
+    # Créer un nouvel objet Trip
+    trip = Trip(departure_location=departure, arrival_location=arrival, departure_date=departure_date, arrival_date=arrival_date, weight=weight)
+
+    # Ajouter l'objet à la base de données
+    db.session.add(trip)
+    db.session.commit()
+
+    # Traiter les données
+    print(departure, arrival, departure_date, arrival_date, weight)
+
+    trips = Trip.query.all()  # Récupère tous les voyages de la base de données
+    return render_template('trips.html', trips=trips)
