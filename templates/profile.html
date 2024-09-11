@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil - Colivree{% endblock %}
+
+{% block content %}
+<h1>Profil de {{ user.username }}</h1>
+
+<div class="container">
+    <h2>Voyages ajoutés</h2>
+    {% if user.trips %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Lieu de départ</th>
+                    <th>Lieu d'arrivée</th>
+                    <th>Date de départ</th>
+                    <th>Date d'arrivée</th>
+                    <th>Poids disponible (kg)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trip in user.trips %}
+                <tr>
+                    <td>{{ trip.departure_location }}</td>
+                    <td>{{ trip.arrival_location }}</td>
+                    <td>{{ trip.departure_date.strftime('%d/%m/%Y') }}</td>
+                    <td>{{ trip.arrival_date.strftime('%d/%m/%Y') }}</td>
+                    <td>{{ trip.available_weight - trip.reserved_weight }} kg</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Vous n'avez ajouté aucun voyage pour le moment.</p>
+    {% endif %}
+</div>
+
+<div class="container">
+    <h2>Réservations effectuées</h2>
+    {% if user.bookings %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Voyage</th>
+                    <th>Poids réservé (kg)</th>
+                    <th>Date de départ</th>
+                    <th>Date d'arrivée</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in user.bookings %}
+                <tr>
+                    <td>De {{ booking.trip.departure_location }} à {{ booking.trip.arrival_location }}</td>
+                    <td>{{ booking.weight }} kg</td>
+                    <td>{{ booking.trip.departure_date.strftime('%d/%m/%Y') }}</td>
+                    <td>{{ booking.trip.arrival_date.strftime('%d/%m/%Y') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Vous n'avez effectué aucune réservation pour le moment.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

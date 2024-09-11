@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_migrate import Migrate
 
-from models import db, Trip, User  # Importation de db, Trip et User depuis models.py
+from models import db, Trip, User, Booking  # Importation de db, Trip et User depuis models.py
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -69,6 +69,22 @@ def login():
     else:
         return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
+
+from flask import render_template, session, redirect, url_for
+
+@app.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+
+    user = User.query.get(session['user_id'])  # Récupérer l'utilisateur connecté à partir de la session
+    return render_template('profile.html', user=user)
+
+
 
 @app.route('/add_trip', methods=['GET', 'POST'])
 def add_trip():
@@ -104,6 +120,37 @@ def add_trip():
 def see_trips():
     trips = Trip.query.all()
     return render_template('see_trips.html', trips=trips)
+
+@app.route('/book_trip/<int:trip_id>', methods=['GET', 'POST'])
+def book_trip(trip_id):
+    trip = Trip.query.get(trip_id)
+
+    if request.method == 'POST':
+        weight = request.form.get('weight')
+
+        # Vérifier si le poids réservé est supérieur au poids disponible
+        if float(weight) > trip.available_weight:
+            flash('Le poids réservé est supérieur au poids disponible.')
+            return redirect(url_for('book_trip', trip_id=trip_id))
+
+        # Crée un nouvel objet Booking et ajoute-le à la base de données
+        new_booking = Booking(
+            weight=float(weight),
+            user_id=session['user_id'],
+            trip_id=trip_id
+        )
+        db.session.add(new_booking)
+        db.session.commit()
+
+        # Mettre à jour le poids disponible
+        trip.available_weight -= float(weight)
+        db.session.commit()
+
+        flash('Réservation effectuée avec succès!')
+        return redirect(url_for('index'))
+    else:
+        return render_template('see_trips.html', trip=trip)
+
 
 if __name__ == '__main__':        
     app.run(debug=True)

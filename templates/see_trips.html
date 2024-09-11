@@ -1,31 +1,42 @@
 {% extends 'base.html' %}
 
-{% block title %}Liste des Voyages - Colivree{% endblock %}
+{% block title %}Liste des Voyages{% endblock %}
 
 {% block content %}
-<h1>Liste des Voyages disponibles</h1>
-<table border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Départ</th>
-            <th>Arrivée</th>
-            <th>Lieu de Départ</th>
-            <th>Lieu d'Arrivée</th>
-            <th>Poids Disponible (kg)</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for trip in trips %}
-        <tr>
-            <td>{{ trip.id }}</td>
-            <td>{{ trip.departure_date.strftime('%Y-%m-%d %H:%M') }}</td>
-            <td>{{ trip.arrival_date.strftime('%Y-%m-%d %H:%M') }}</td>
-            <td>{{ trip.departure_location }}</td>
-            <td>{{ trip.arrival_location }}</td>
-            <td>{{ trip.available_weight }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<h1>Voyages Disponibles</h1>
+<div class="container">
+    {% if trips %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Lieu de Départ</th>
+                    <th>Lieu d'Arrivée</th>
+                    <th>Date de Départ</th>
+                    <th>Date d'Arrivée</th>
+                    <th>Poids Disponible (kg)</th>
+                    <th>Réserver</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trip in trips %}
+                    <tr>
+                        <td>{{ trip.departure_location }}</td>
+                        <td>{{ trip.arrival_location }}</td>
+                        <td>{{ trip.departure_date.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ trip.arrival_date.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ trip.available_weight - trip.reserved_weight }}</td>
+                        <td>
+                            <form action="{{ url_for('book_trip', trip_id=trip.id) }}" method="post">
+                                <input type="number" name="weight" min="0" max="{{ trip.available_weight - trip.reserved_weight }}" step="0.1" required>
+                                <button type="submit">Réserver</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucun voyage disponible.</p>
+    {% endif %}
+</div>
 {% endblock %}
