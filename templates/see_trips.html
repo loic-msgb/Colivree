@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Voyages - Colivree{% endblock %}
+
+{% block content %}
+<h1>Liste des Voyages disponibles</h1>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Départ</th>
+            <th>Arrivée</th>
+            <th>Lieu de Départ</th>
+            <th>Lieu d'Arrivée</th>
+            <th>Poids Disponible (kg)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trip in trips %}
+        <tr>
+            <td>{{ trip.id }}</td>
+            <td>{{ trip.departure_date.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ trip.arrival_date.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ trip.departure_location }}</td>
+            <td>{{ trip.arrival_location }}</td>
+            <td>{{ trip.weight }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

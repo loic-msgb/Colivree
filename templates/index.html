@@ -5,5 +5,10 @@
 {% block content %}
 <p>Colivree est une application de livraison de colis entre particuliers.</p>
 <p>Vous avez un colis à envoyer ? Vous êtes au bon endroit !</p>
-
+<div>
+    <button><a href="{{ url_for('add_trip') }}">Ajouter un voyage</a></button>
+</div>
+<div>
+    <button><a href="{{ url_for('see_trips') }}">Voir les voyages</a></button>
+</div>
 {% endblock %}

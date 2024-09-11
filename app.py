@@ -69,8 +69,41 @@ def login():
     else:
         return render_template('login.html')
 
-    
 
+@app.route('/add_trip', methods=['GET', 'POST'])
+def add_trip():
+    if request.method == 'POST':
+        departure = request.form.get('departure')
+        arrival = request.form.get('arrival')
+        departure_date = request.form.get('departure_date')
+        arrival_date = request.form.get('arrival_date')
+        available_weight = request.form.get('available_weight')
+
+        # Crée un nouvel objet Trip et ajoute-le à la base de données
+        new_trip = Trip(
+            departure_location=departure,
+            arrival_location=arrival,
+            departure_date=datetime.strptime(departure_date, '%Y-%m-%d'),
+            arrival_date=datetime.strptime(arrival_date, '%Y-%m-%d'),
+            available_weight=float(available_weight),
+            user_id=session['user_id']  # Assurez-vous que l'utilisateur est connecté
+        )
+        db.session.add(new_trip)
+        db.session.commit()
+
+        flash('Voyage ajouté avec succès!')
+        return redirect(url_for('index'))
+    else:
+        # Vérifier si l'utilisateur est connecté
+        if 'user_id' not in session:
+            flash('Veuillez vous connecter pour ajouter un voyage.')
+            return redirect(url_for('login'))
+        return render_template('add_trip.html')    
+
+@app.route('/see_trips', methods=['GET'] )
+def see_trips():
+    trips = Trip.query.all()
+    return render_template('see_trips.html', trips=trips)
 
 if __name__ == '__main__':        
     app.run(debug=True)

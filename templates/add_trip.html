@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Ajouter un Voyage - Colivree{% endblock %}
+
+{% block content %}
+<h1>Ajouter un Voyage</h1>
+<div class="container" id="form">
+    <h2>Formulaire de Transport</h2>
+    <form action="{{ url_for('add_trip') }}" method="post">
+        <div class="form-group">
+            <label for="departure">Lieu de départ :</label>
+            <input type="text" id="departure" name="departure" placeholder="Entrez le lieu de départ" required class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="arrival">Lieu d'arrivée :</label>
+            <input type="text" id="arrival" name="arrival" placeholder="Entrez le lieu d'arrivée" required class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="departure-date">Date de départ :</label>
+            <input type="date" id="departure-date" name="departure_date" required class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="arrival-date">Date d'arrivée :</label>
+            <input type="date" id="arrival-date" name="arrival_date" required class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="weight">Poids disponible (kg) :</label>
+            <input type="number" id="weight" name="available_weight" min="0" placeholder="Poids disponible" required class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Soumettre</button>
+    </form>
+</div>
+{% endblock %}
